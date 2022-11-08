@@ -16,6 +16,9 @@ function App() {
     const monthNames = ['',"January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"];
     const dates = [];
+    var yAxis = d3.scaleLinear()
+    .range([ 0, 180])
+    .domain(['12','0'])
         // eslint-disable-next-line
     dataset.dataset.monthlyVariance.map((item)=>{dates.push(parseTime(item.year))})
     const domain = d3.extent(dates)
@@ -24,7 +27,7 @@ function App() {
     .domain(domain)
 
     var y = d3.scaleBand()
-    .range([ 0, 350 ])
+    .range([ 360, 0 ])
     .domain(dataset.dataset.monthlyVariance.map((item)=>{return monthNames[item.month]}))
     ;
     
@@ -41,7 +44,7 @@ function App() {
     .append("rect")
     .attr('x', d=> x(parseTime(d.year)))
     .attr('y', d=> (y(monthNames[d.month])-350))
-    .attr('width', 3)
+    .attr('width', 2.45)
     .attr('height',30)
     .attr("fill", function(d){
       return (baseline+d.variance >= 12) ? '#641E16' : 
@@ -72,36 +75,27 @@ function App() {
         .style('outline', 'none')
        tooltip.style('opacity', 0) 
     })
-
+    svgElement.append("g")
+    .call(d3.axisLeft(yAxis).ticks(12))
+    .attr('transform', 'translate(760,-300)')
     svgElement.append("g")
     .call(d3.axisBottom(x))
+    .attr('transform', 'translate(0,10)')
     svgElement.append("g")
     .call(d3.axisLeft(y))
     .attr('transform', 'translate(-1,-350)')
-    svgElement.append('rect').attr('x',730).attr('y',-300).attr('width',10).attr('height',10).style('fill','#641E16')
-    svgElement.append('text').attr('x',743).attr('y',-294).text('> 12').style('font-size','7.5px').attr('alignment-baseline','middle').attr('fill','gray')
-    svgElement.append('rect').attr('x',730).attr('y',-280).attr('width',10).attr('height',10).style('fill','#A93226')
-    svgElement.append('text').attr('x',743).attr('y',-274).text('> 10 & < 12').style('font-size','7.5px').attr('alignment-baseline','middle').attr('fill','gray')
-    svgElement.append('rect').attr('x',730).attr('y',-260).attr('width',10).attr('height',10).style('fill','#E74C3C')
-    svgElement.append('text').attr('x',743).attr('y',-254).text('> 9 & < 10').style('font-size','7.5px').attr('alignment-baseline','middle').attr('fill','gray')
-    svgElement.append('rect').attr('x',730).attr('y',-240).attr('width',10).attr('height',10).style('fill','#F57F17')
-    svgElement.append('text').attr('x',743).attr('y',-234).text('> 7 & < 9').style('font-size','7.5px').attr('alignment-baseline','middle').attr('fill','gray')
-    svgElement.append('rect').attr('x',730).attr('y',-220).attr('width',10).attr('height',10).style('fill','#F4D03F')
-    svgElement.append('text').attr('x',743).attr('y',-214).text('> 6 & < 7').style('font-size','7.5px').attr('alignment-baseline','middle').attr('fill','gray')
-    svgElement.append('rect').attr('x',730).attr('y',-200).attr('width',10).attr('height',10).style('fill','#D7BDE2')
-    svgElement.append('text').attr('x',743).attr('y',-194).text('> 5 & < 6').style('font-size','7.5px').attr('alignment-baseline','middle').attr('fill','gray')
-    svgElement.append('rect').attr('x',730).attr('y',-180).attr('width',10).attr('height',10).style('fill','#A9CCE3')
-    svgElement.append('text').attr('x',743).attr('y',-174).text('> 4 & < 5').style('font-size','7.5px').attr('alignment-baseline','middle').attr('fill','gray')
-    svgElement.append('rect').attr('x',730).attr('y',-160).attr('width',10).attr('height',10).style('fill','#2471A3')
-    svgElement.append('text').attr('x',743).attr('y',-154).text('> 3 & < 4').style('font-size','7.5px').attr('alignment-baseline','middle').attr('fill','gray')
-    svgElement.append('rect').attr('x',730).attr('y',-140).attr('width',10).attr('height',10).style('fill','#154360')
-    svgElement.append('text').attr('x',743).attr('y',-134).text('> 2 & < 3').style('font-size','7.5px').attr('alignment-baseline','middle').attr('fill','gray')
-    svgElement.append('rect').attr('x',730).attr('y',-120).attr('width',10).attr('height',10).style('fill','#7DCEA0')
-    svgElement.append('text').attr('x',743).attr('y',-114).text('> 1 & < 2').style('font-size','7.5px').attr('alignment-baseline','middle').attr('fill','gray')
-    svgElement.append('rect').attr('x',730).attr('y',-100).attr('width',10).attr('height',10).style('fill','#8BC34A')
-    svgElement.append('text').attr('x',743).attr('y',-94).text('> 0 & < 1').style('font-size','7.5px').attr('alignment-baseline','middle').attr('fill','gray')
-    svgElement.append('rect').attr('x',730).attr('y',-80).attr('width',10).attr('height',10).style('fill','#196F3D')
-    svgElement.append('text').attr('x',743).attr('y',-74).text('< 0').style('font-size','7.5px').attr('alignment-baseline','middle').attr('fill','gray')
+    svgElement.append('rect').attr('x',762).attr('y',-300).attr('width',15).attr('height',15).style('fill','#641E16')
+    svgElement.append('rect').attr('x',762).attr('y',-285).attr('width',15).attr('height',15).style('fill','#A93226')
+    svgElement.append('rect').attr('x',762).attr('y',-270).attr('width',15).attr('height',15).style('fill','#E74C3C')
+    svgElement.append('rect').attr('x',762).attr('y',-255).attr('width',15).attr('height',15).style('fill','#F57F17')
+    svgElement.append('rect').attr('x',762).attr('y',-240).attr('width',15).attr('height',15).style('fill','#F4D03F')
+    svgElement.append('rect').attr('x',762).attr('y',-225).attr('width',15).attr('height',15).style('fill','#D7BDE2')
+    svgElement.append('rect').attr('x',762).attr('y',-210).attr('width',15).attr('height',15).style('fill','#A9CCE3')
+    svgElement.append('rect').attr('x',762).attr('y',-195).attr('width',15).attr('height',15).style('fill','#2471A3')
+    svgElement.append('rect').attr('x',762).attr('y',-180).attr('width',15).attr('height',15).style('fill','#154360')
+    svgElement.append('rect').attr('x',762).attr('y',-165).attr('width',15).attr('height',15).style('fill','#7DCEA0')
+    svgElement.append('rect').attr('x',762).attr('y',-150).attr('width',15).attr('height',15).style('fill','#8BC34A')
+    svgElement.append('rect').attr('x',762).attr('y',-135).attr('width',15).attr('height',15).style('fill','#196F3D')
 
     svgElement.append('text')
     // eslint-disable-next-line
@@ -114,7 +108,7 @@ function App() {
 
 svgElement.append('text')
 // eslint-disable-next-line
-.attr('transform', 'translate(320'+' ,'+(-420)+
+.attr('transform', 'translate(350'+' ,'+(-420)+
 ')')
 .style('text-anchor', 'middle')
 .text('Global Monthly Surface Temperatures (1753 - 2015)')
@@ -122,7 +116,7 @@ svgElement.append('text')
 .attr('fill', 'gray')
 svgElement.append('text')
 // eslint-disable-next-line
-.attr('transform', 'translate(320'+' ,'+(-400)+
+.attr('transform', 'translate(350'+' ,'+(-400)+
 ')')
 .style('text-anchor', 'middle')
 .text('(Normalized to a basal temperature of 8.66 degrees celsius)')
@@ -141,7 +135,7 @@ svgElement.append('text')
   return (
     <div className="body">
       <svg ref={ref} 
-    viewBox='-100 -500 1000 600'>
+    viewBox='-250 -450 1200 900'>
     </svg>
     </div>
   );
